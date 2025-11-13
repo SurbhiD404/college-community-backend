@@ -42,3 +42,36 @@ class UserSerializer(serializers.ModelSerializer):
     class Meta:
         model = User
         fields = ['id', 'email', 'username', 'is_email_verified', 'department', 'batch']
+
+class UserUpdateSerializer(serializers.ModelSerializer):
+    password = serializers.CharField(write_only=True, required=False)
+    confirm_password = serializers.CharField(write_only=True, required=False)
+
+    class Meta:
+        model = User
+        fields = ['username', 'email', 'password', 'confirm_password']
+
+    def validate(self, data):
+        email = data.get('email')
+        if email and not email.endswith('@akgec.ac.in'):
+            raise serializers.ValidationError("Email must be a valid @akgec.ac.in address.")
+
+        password = data.get('password')
+        confirm_password = data.get('confirm_password')
+        if password or confirm_password:
+            if password != confirm_password:
+                raise serializers.ValidationError("Passwords do not match.")
+            validate_password(password)
+        return data
+
+    def update(self, instance, validated_data):
+        instance.username = validated_data.get('username', instance.username)
+        instance.email = validated_data.get('email', instance.email)
+
+       
+        password = validated_data.get('password')
+        if password:
+            instance.set_password(password)
+
+        instance.save()
+        return instance

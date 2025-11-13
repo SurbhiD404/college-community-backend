@@ -5,10 +5,11 @@ from django.contrib.auth import get_user_model
 from .serializers import RegisterSerializer, UserSerializer
 from rest_framework_simplejwt.views import TokenObtainPairView
 from rest_framework_simplejwt.serializers import TokenObtainPairSerializer
+from rest_framework import generics, permissions
+from .serializers import UserUpdateSerializer
+from django.contrib.auth import get_user_model
 
 User = get_user_model()
-
-
 
 @api_view(['POST'])
 @permission_classes([permissions.AllowAny])
@@ -49,4 +50,9 @@ class MyTokenObtainPairView(TokenObtainPairView):
 def me_view(request):
     serializer = UserSerializer(request.user)
     return Response(serializer.data)
+class UserUpdateView(generics.RetrieveUpdateAPIView):
+    serializer_class = UserUpdateSerializer
+    permission_classes = [permissions.IsAuthenticated]
 
+    def get_object(self):
+        return self.request.user
