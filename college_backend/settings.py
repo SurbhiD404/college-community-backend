@@ -43,6 +43,8 @@ INSTALLED_APPS = [
     'corsheaders',
      'accounts',
      'events',
+     'channels',
+     'chat',
 ]
 
 MIDDLEWARE = [
@@ -146,3 +148,14 @@ SIMPLE_JWT = {
 CORS_ALLOW_ALL_ORIGINS = True
 EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
 DEFAULT_FROM_EMAIL = '@akgec.ac.in'
+
+ASGI_APPLICATION = 'college_backend.asgi.application'
+
+CHANNEL_LAYERS = {
+    "default": {
+        "BACKEND": "channels_redis.core.RedisChannelLayer",
+        "CONFIG": {
+            "hosts": [("127.0.0.1", 6379)],
+        },
+    },
+}
