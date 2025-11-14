@@ -22,3 +22,6 @@ urlpatterns = [
     path('api/auth/', include('accounts.urls')),
     path('api/events/', include('events.urls')),
 ]
+# admin.site.site_header = "College Community Admin"
+# admin.site.site_title = "College Community Portal"
+# admin.site.index_title = "Welcome to College Backend Admin"

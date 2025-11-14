@@ -76,4 +76,4 @@ class UserUpdateSerializer(serializers.ModelSerializer):
         instance.save()
         return instance
 class LogoutSerializer(serializers.Serializer):
-    refresh = serializers.Charfield()
+    refresh = serializers.CharField()
